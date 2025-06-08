@@ -440,22 +440,74 @@ class SubstitutionManager {
     if (this.loadingState) this.loadingState.classList.remove('hidden');
     if (this.errorState) this.errorState.classList.add('hidden');
     if (this.noResults) this.noResults.classList.add('hidden');
-    
+
     // Show loading spinner in buttons
     this.toggleLoadingButtons(true);
-    
-    // Simulate API request delay
-    setTimeout(() => {
-      try {
-        // Process the sample data
-        this.processSubstitutions(this.data.sampleSubstitutions);
+
+    const dateStr = calendarWidget
+      ? calendarWidget.formatDateForAPI(calendarWidget.getSelectedDate())
+      : new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
+    const requestBody = {
+      formatName: 'Web-Schüler-heute',
+      schoolName: 'dessauer-schule-limburg',
+      date: parseInt(dateStr, 10),
+      dateOffset: 0,
+      activityTypeIds: [],
+      departmentElementType: -1,
+      departmentIds: [],
+      enableSubstitutionFrom: false,
+      groupBy: 1,
+      hideAbsent: false,
+      hideCancelCausedByEvent: false,
+      hideCancelWithSubstitution: true,
+      mergeBlocks: true,
+      showAbsentElements: [],
+      showAbsentTeacher: true,
+      showAffectedElements: [1],
+      showBreakSupervisions: false,
+      showCancel: true,
+      showClass: true,
+      showEvent: true,
+      showExamSupervision: false,
+      showHour: true,
+      showInfo: true,
+      showMessages: true,
+      showOnlyCancel: false,
+      showOnlyFutureSub: true,
+      showRoom: true,
+      showStudentgroup: false,
+      showSubject: true,
+      showSubstText: true,
+      showSubstTypeColor: false,
+      showSubstitutionFrom: 0,
+      showTeacher: true,
+      showTeacherOnEvent: false,
+      showTime: true,
+      showUnheraldedExams: false,
+      showUnitTime: false,
+      strikethrough: true,
+      strikethroughAbsentTeacher: true
+    };
+
+    fetch('/api/substitution', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Request failed');
+        return res.json();
+      })
+      .then(data => {
+        this.processSubstitutions(data.payload.rows);
         if (this.loadingState) this.loadingState.classList.add('hidden');
         this.toggleLoadingButtons(false);
-      } catch (error) {
+      })
+      .catch(error => {
         console.error('Error loading substitutions:', error);
         this.showError('Es ist ein Fehler beim Laden der Vertretungen aufgetreten. Bitte versuchen Sie es später erneut.');
-      }
-    }, 1000);
+      });
   }
   
   toggleLoadingButtons(isLoading) {
