@@ -47,9 +47,6 @@ export default function HomePage() {
     <div className="flex flex-col gap-6 p-6">
       {/* Calendar for mobile */}
       <div>
-        <h3 className="text-lg font-semibold text-[rgb(var(--color-text))] mb-4">
-          Datum wählen
-        </h3>
         <CalendarWidget
           selectedDate={selectedDate}
           onDateSelect={handleDateSelect}
@@ -94,6 +91,8 @@ export default function HomePage() {
       <Header
         onMenuToggle={handleMobileMenuToggle}
         onNavigateHome={handleNavigateHome}
+        onNavigateToImpress={handleNavigateToImpress}
+        onNavigateToPrivacy={handleNavigateToPrivacy}
       />
 
       <MobileMenu
@@ -109,30 +108,14 @@ export default function HomePage() {
           <div className="sticky top-6 space-y-6">
             {/* Calendar Widget */}
             <div>
-              <h3 className="text-lg font-semibold text-[rgb(var(--color-text))] mb-4">
-                Datum wählen
-              </h3>
+            
               <CalendarWidget
                 selectedDate={selectedDate}
                 onDateSelect={handleDateSelect}
               />
             </div>
 
-            {/* Navigation Links */}
-            <nav className="space-y-2">
-              <button
-                onClick={handleNavigateToImpress}
-                className="block w-full text-left text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-primary))] py-2 px-3 rounded-lg hover:bg-[rgb(var(--color-surface))] transition-colors"
-              >
-                Impressum
-              </button>
-              <button
-                onClick={handleNavigateToPrivacy}
-                className="block w-full text-left text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-primary))] py-2 px-3 rounded-lg hover:bg-[rgb(var(--color-surface))] transition-colors"
-              >
-                Datenschutz
-              </button>
-            </nav>
+            
           </div>
         </aside>
 

@@ -7,9 +7,11 @@ import { ThemeToggle } from '@/components/theme-toggle';
 interface HeaderProps {
   onMenuToggle: () => void;
   onNavigateHome: () => void;
+  onNavigateToImpress: () => void;
+  onNavigateToPrivacy: () => void;
 }
 
-export function Header({ onMenuToggle, onNavigateHome }: HeaderProps) {
+export function Header({ onMenuToggle, onNavigateHome, onNavigateToImpress, onNavigateToPrivacy }: HeaderProps) {
   return (
     <header className="sticky top-0 z-10 bg-[rgb(var(--color-surface))] border-b border-[rgb(var(--color-border)/0.2)] shadow-sm">
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
@@ -44,26 +46,18 @@ export function Header({ onMenuToggle, onNavigateHome }: HeaderProps) {
         <div className="flex items-center gap-4">
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center gap-4">
-            <a
-              href="#impressum"
-              className="text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-primary))] transition-colors duration-150"
-              onClick={(e) => {
-                e.preventDefault();
-                // This will be handled by the parent component
-              }}
+            <button
+              className="text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-primary))] transition-colors duration-150 rounded-sm px-2 py-1 -mx-2 -my-1 hover:bg-[rgb(var(--color-secondary)/0.12)] focus-visible:outline-[rgb(var(--color-primary))] focus-visible:outline-2 focus-visible:outline-offset-2"
+              onClick={onNavigateToImpress}
             >
               Impressum
-            </a>
-            <a
-              href="#datenschutz"
-              className="text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-primary))] transition-colors duration-150"
-              onClick={(e) => {
-                e.preventDefault();
-                // This will be handled by the parent component
-              }}
+            </button>
+            <button
+              className="text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-primary))] transition-colors duration-150 rounded-sm px-2 py-1 -mx-2 -my-1 hover:bg-[rgb(var(--color-secondary)/0.12)] focus-visible:outline-[rgb(var(--color-primary))] focus-visible:outline-2 focus-visible:outline-offset-2"
+              onClick={onNavigateToPrivacy}
             >
               Datenschutz
-            </a>
+            </button>
           </nav>
 
           {/* Theme toggle */}
