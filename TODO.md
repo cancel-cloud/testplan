@@ -27,7 +27,7 @@
 - [x] Support clicking on adjacent month dates
 - [x] Make calendar responsive (desktop sidebar + mobile menu)
 
-## API Integration
+## API Integration (Basic)
 - [x] Create TypeScript interfaces for WebUntis API request/response
 - [x] Implement API service for fetching substitution data
 - [x] Add error handling for API requests (network, auth, rate limiting)
@@ -36,6 +36,90 @@
 - [x] Add loading states for API calls
 - [x] Implement retry logic for failed requests
 - [x] Add environment configuration for API endpoints
+
+## Real API Implementation & Authentication
+- [ ] Setup environment variables for WebUntis credentials
+  - [ ] Add WEBUNTIS_SCHOOL_NAME to .env.local
+  - [ ] Add WEBUNTIS_BASE_URL to .env.local
+  - [ ] Add optional WEBUNTIS_USERNAME/PASSWORD for server-side auth
+- [ ] Implement session management for WebUntis cookies
+  - [ ] Create session storage service for Tenant-Id and schoolname cookies
+  - [ ] Implement JSESSIONID handling and renewal
+  - [ ] Add session expiration detection and refresh logic
+  - [ ] Handle traceId generation and management
+- [ ] Create WebUntis authentication service
+  - [ ] Implement login flow (if needed for server-side)
+  - [ ] Add session validation endpoint
+  - [ ] Create cookie-based authentication for client requests
+  - [ ] Handle authentication errors and token refresh
+- [ ] Enhance API request builder
+  - [ ] Build dynamic headers with proper cookies
+  - [ ] Implement request payload builder with configurable options
+  - [ ] Add school-specific URL generation
+  - [ ] Handle date range requests (today, tomorrow, custom dates)
+- [ ] Add API request validation
+  - [ ] Validate date formats before sending requests
+  - [ ] Check for required authentication data
+  - [ ] Add request sanitization and security checks
+- [ ] Implement real-time data fetching
+  - [ ] Create data fetching hooks for different views
+  - [ ] Add automatic refresh on date changes
+  - [ ] Implement background refresh for current day data
+  - [ ] Handle API rate limiting and request throttling
+
+## Client-Side Caching System
+- [ ] Design caching architecture
+  - [ ] Choose caching strategy (React Query, SWR, or custom)
+  - [ ] Define cache key structure (date-based, school-based)
+  - [ ] Set cache expiration policies (per data type)
+  - [ ] Plan cache invalidation strategies
+- [ ] Implement core caching service
+  - [ ] Create cache storage abstraction (localStorage + memory)
+  - [ ] Add cache key generation utilities
+  - [ ] Implement cache hit/miss tracking
+  - [ ] Add cache size management and cleanup
+- [ ] Build cache-aware API layer
+  - [ ] Create cached API request wrapper
+  - [ ] Implement stale-while-revalidate pattern
+  - [ ] Add background cache refresh
+  - [ ] Handle offline/online state changes
+- [ ] Add data freshness management
+  - [ ] Implement last-updated timestamps
+  - [ ] Create cache invalidation triggers
+  - [ ] Add manual refresh functionality
+  - [ ] Handle server-side data updates detection
+- [ ] Optimize cache performance
+  - [ ] Implement cache preloading for likely-needed dates
+  - [ ] Add cache compression for large datasets
+  - [ ] Create cache warming strategies
+  - [ ] Add cache hit ratio monitoring
+- [ ] Handle cache edge cases
+  - [ ] Manage cache during school holidays
+  - [ ] Handle timezone changes and DST
+  - [ ] Add cache migration for app updates
+  - [ ] Implement graceful fallback when cache fails
+
+## Data Processing & Transformation
+- [ ] Enhance response data parsing
+  - [ ] Parse HTML entities in teacher/room names
+  - [ ] Extract and normalize subject abbreviations
+  - [ ] Handle special substitution types (Entfall, Raumänderung, etc.)
+  - [ ] Parse time ranges and convert to app format
+- [ ] Implement data normalization
+  - [ ] Standardize class name formats
+  - [ ] Normalize teacher abbreviations
+  - [ ] Handle room number formats consistently
+  - [ ] Create unified substitution type mapping
+- [ ] Add data validation and sanitization
+  - [ ] Validate API response structure
+  - [ ] Sanitize HTML content safely
+  - [ ] Check for malformed data and handle gracefully
+  - [ ] Add data completeness verification
+- [ ] Create data aggregation utilities
+  - [ ] Group substitutions by class/teacher/subject
+  - [ ] Calculate statistics (total substitutions, by type)
+  - [ ] Generate daily/weekly summaries
+  - [ ] Create affected elements tracking
 
 ## Data Management
 - [x] Create TypeScript interfaces for substitution data
@@ -106,6 +190,18 @@
 - [x] Implement in-memory caching for API responses
 - [x] Add proper error messages and user feedback
 
+## Performance & Monitoring
+- [ ] Add API performance monitoring
+  - [ ] Track request/response times
+  - [ ] Monitor cache hit rates
+  - [ ] Log API errors and retry attempts
+  - [ ] Add user interaction analytics
+- [ ] Implement performance optimizations
+  - [ ] Add request deduplication
+  - [ ] Implement virtual scrolling for large datasets
+  - [ ] Optimize re-renders with proper memoization
+  - [ ] Add bundle size optimization
+
 ## Final Polish
 - [x] Add proper error handling
 - [x] Implement proper TypeScript types throughout
@@ -120,4 +216,7 @@
 - [ ] Test mobile menu and responsive design
 - [ ] Test legal page navigation
 - [ ] Test welcome overlay
+- [ ] Test API integration with real WebUntis data
+- [ ] Test caching behavior and invalidation
+- [ ] Test offline/online state handling
 - [ ] Final code cleanup and optimization 
