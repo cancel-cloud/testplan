@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ProcessedSubstitution, SubstitutionData } from '@/types';
+import { ProcessedSubstitution, WebUntisResponse } from '@/types';
 import { processApiResponse } from '@/lib/data-processing';
-import { sampleData } from '@/data/sample-data';
+import { formatDateForApi } from '@/lib/utils';
 
 interface UseSubstitutionsResult {
   substitutions: ProcessedSubstitution[];
@@ -39,28 +39,17 @@ export function useSubstitutions(selectedDate: Date): UseSubstitutionsResult {
     setError(null);
 
     try {
-      // For now, use sample data since the API requires authentication and CORS setup
-      // In a real implementation, you would use the API service here:
-      // const apiService = ApiService.getInstance();
-      // const response = await apiService.fetchSubstitutions(selectedDate);
-      // const processed = processApiResponse(response);
+      const dateString = formatDateForApi(selectedDate);
+      const response = await fetch(`/api/substitutions?date=${dateString}`);
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Request failed with status ${response.status}`);
+      }
       
-      // Process sample data into our format
-      const processed = sampleData.sampleSubstitutions.map((data: SubstitutionData) => ({
-        hours: data.data[0],
-        time: data.data[1],
-        group: data.data[2],
-        subject: data.data[3],
-        room: data.data[4],
-        teacher: data.data[5],
-        type: data.data[6],
-        info: data.data[7],
-        originalData: data,
-      }));
-
+      const data: WebUntisResponse = await response.json();
+      const processed = processApiResponse(data);
+      
       // Cache the result
       cache.set(cacheKey, { data: processed, timestamp: Date.now() });
       
