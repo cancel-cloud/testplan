@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sparkles, X, Calendar, Search, Filter } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 export function WelcomeOverlay() {
   const [isVisible, setIsVisible] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     // Check if welcome has been shown before
@@ -15,16 +15,60 @@ export function WelcomeOverlay() {
     
     if (!hasSeenWelcome) {
       setIsVisible(true);
-      setShowConfetti(true);
-      
-      // Stop confetti after 3 seconds
-      const confettiTimer = setTimeout(() => {
-        setShowConfetti(false);
-      }, 3000);
-
-      return () => clearTimeout(confettiTimer);
     }
   }, []);
+
+  useEffect(() => {
+    // Trigger confetti when overlay becomes visible
+    if (isVisible) {
+      // Small delay to let the overlay render first
+      const timer = setTimeout(() => {
+        triggerWelcomeConfetti();
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible]);
+
+  const triggerWelcomeConfetti = () => {
+    const duration = 3000;
+    const end = Date.now() + duration;
+
+    // Initial burst from center
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+
+    // Continuous confetti from both sides
+    const frame = () => {
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.8 },
+        colors: ['#218095', '#5E5240', '#C0152F', '#1FB8CD']
+      });
+      
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.8 },
+        colors: ['#218095', '#5E5240', '#C0152F', '#1FB8CD']
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    };
+
+    // Start the continuous animation after a short delay
+    setTimeout(() => {
+      requestAnimationFrame(frame);
+    }, 500);
+  };
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -35,24 +79,7 @@ export function WelcomeOverlay() {
 
   return (
     <>
-      {/* Confetti Animation */}
-      {showConfetti && (
-        <div className="fixed inset-0 pointer-events-none z-[100] overflow-hidden">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 rounded-full animate-bounce"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                backgroundColor: `hsl(${Math.random() * 360}, 70%, 60%)`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 2}s`
-              }}
-            />
-          ))}
-        </div>
-      )}
+
 
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
